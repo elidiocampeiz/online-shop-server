@@ -1,0 +1,11 @@
+{
+    "name": "online-shop-server",
+    "version": "1.0.0",
+    "description": "NodeJS and Express Server Side API to interact with PostgreSQL",
+    "main": "index.js",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1",
+        "pg": "^8.5.1"
+    }
+}
