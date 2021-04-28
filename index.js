@@ -24,7 +24,8 @@ app.get('/user/get', (req, res) => {
   })
 })
 
-app.post('/user/register', (req, res) => {
+
+app.post('/user/add', (req, res) => {
   models.createUser(req.body)
   .then(response => {
     res.status(200).send(response);
