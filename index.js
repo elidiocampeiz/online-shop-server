@@ -34,8 +34,10 @@ app.post('/user/add', (req, res) => {
     res.status(500).send(error);
   })
 })
-app.delete('/user/delete', (req, res) => {
-  merchant_model.deleteUser(req.body)
+app.delete('/userdelete/:id', (req, res) => {
+  let { id } = req.params;
+  console.log(id);
+  models.deleteUser(id)
   .then(response => {
     res.status(200).send(response);
   })

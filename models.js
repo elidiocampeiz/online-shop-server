@@ -7,6 +7,7 @@ const pool = new Pool({
   password: "joseneto",
   port: 5432,
 });
+
 const getUsers = () => {
   return new Promise(function(resolve, reject) {
     pool.query('SELECT * FROM user_table ORDER BY user_id ASC', (error, results) => {
@@ -31,9 +32,8 @@ const createUser = (body) => {
   })
 }
 
-const deleteUser = (body) => {
+const deleteUser = (id) => {
   return new Promise(function(resolve, reject) {
-    const id = parseInt(body.user_id)
     pool.query('DELETE FROM user_table WHERE user_id = $1', 
     [id], (error, results) => {
       if (error) {
