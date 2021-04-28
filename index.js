@@ -1,8 +1,9 @@
-const express = require('express')
-const app = express()
-const port = 3001
+const { response } = require('express');
+const express = require('express');
+const app = express();
+const port = 3001;
 
-const user_model = require('./user_model')
+const user_model = require('./user_model');
 
 app.use(express.json())
 app.use(function (req, res, next) {
@@ -12,7 +13,8 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get('/', (req, res) => {
+
+app.get('/user/get', (req, res) => {
   user_model.getUsers()
   .then(response => {
     res.status(200).send(response);
@@ -22,7 +24,7 @@ app.get('/', (req, res) => {
   })
 })
 
-app.post('/users', (req, res) => {
+app.post('/create-user', (req, res) => {
   user_model.createUser(req.body)
   .then(response => {
     res.status(200).send(response);
@@ -31,9 +33,8 @@ app.post('/users', (req, res) => {
     res.status(500).send(error);
   })
 })
-
-app.delete('/users/:id', (req, res) => {
-  user_model.deleteUser(req.params.id)
+app.delete('/user/delete', (req, res) => {
+  merchant_model.deleteUser(req.body)
   .then(response => {
     res.status(200).send(response);
   })

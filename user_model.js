@@ -1,9 +1,9 @@
 const Pool = require('pg').Pool
 const pool = new Pool({
-  user: 'my_user',
+  user: 'postgres',
   host: 'localhost',
-  database: 'my_database',
-  password: 'root',
+  database: 'online-shop',
+  password: 'joseneto',
   port: 5432,
 });
 
@@ -21,19 +21,19 @@ const getUsers = () => {
 }
 const createUser = (body) => {
   return new Promise(function(resolve, reject) {
-    const { username, password } = body
-    pool.query('INSERT INTO user_table (username, password) VALUES ($1, $2) RETURNING *', 
-    [username, password], (error, results) => {
+    const { username, password, is_adm } = body
+    pool.query('INSERT INTO user_table (username, password, is_adm) VALUES ($1, $2, $3) RETURNING *', 
+    [username, password, is_adm], (error, results) => {
       if (error) {
         reject(error)
       }
-      resolve(`A new User has been added added: ${results.rows[0]}`)
+      resolve(`A new User has been added added`)
     })
   })
 }
-const deleteUser = () => {
+const deleteUser = (body) => {
   return new Promise(function(resolve, reject) {
-    const id = parseInt(request.params.id)
+    const id = parseInt(body.user_id)
     pool.query('DELETE FROM user_table WHERE user_id = $1', 
     [id], (error, results) => {
       if (error) {
