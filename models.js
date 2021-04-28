@@ -55,9 +55,9 @@ const getProducts = () => {
   }) 
 }
 
-const createProduct = (body) => {
+const createProduct = (product_name, price ) => {
   return new Promise(function(resolve, reject) {
-    const { username, password, is_adm } = body
+    
     pool.query('INSERT INTO products_table (product_name, price) VALUES ($1, $2) RETURNING *', 
     [product_name, price], (error, results) => {
       if (error) {
@@ -68,9 +68,8 @@ const createProduct = (body) => {
   })
 }
 
-const deleteProduct = (body) => {
+const deleteProduct = (id) => {
   return new Promise(function(resolve, reject) {
-    const id = parseInt(body.user_id)
     pool.query('DELETE FROM products_table WHERE product_id = $1', 
     [id], (error, results) => {
       if (error) {
