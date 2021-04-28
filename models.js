@@ -7,6 +7,7 @@ const pool = new Pool({
   password: "joseneto",
   port: 5432,
 });
+
 const getUsers = () => {
   return new Promise(function(resolve, reject) {
     pool.query('SELECT * FROM user_table ORDER BY user_id ASC', (error, results) => {
@@ -44,10 +45,48 @@ const deleteUser = (body) => {
   })
 }
 
+const getProducts = () => {
+  return new Promise(function(resolve, reject) {
+    pool.query('SELECT * FROM products_table ORDER BY product_id ASC', (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+    })
+  }) 
+}
 
+const createProduct = (body) => {
+  return new Promise(function(resolve, reject) {
+    const { username, password, is_adm } = body
+    pool.query('INSERT INTO products_table (product_name, price) VALUES ($1, $2) RETURNING *', 
+    [product_name, price], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(`A new product has been added added`)
+    })
+  })
+}
+
+const deleteProduct = (body) => {
+  return new Promise(function(resolve, reject) {
+    const id = parseInt(body.user_id)
+    pool.query('DELETE FROM products_table WHERE product_id = $1', 
+    [id], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(`Product deleted with ID: ${id}`)
+    })
+  })
+}
 
 module.exports = {
   getUsers,
   createUser,
   deleteUser,
+  getProducts,
+  createProduct,
+  deleteProduct,
 }
