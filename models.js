@@ -17,6 +17,7 @@ const getUsers = () => {
     })
   }) 
 }
+
 const createUser = (body) => {
   return new Promise(function(resolve, reject) {
     const { username, password, is_adm } = body
@@ -30,18 +31,6 @@ const createUser = (body) => {
   })
 }
 
-const getUser = (body) => {
-  return new Promise(function(resolve, reject) {
-    const { username, password, is_adm } = body
-    pool.query('INSERT INTO user_table (username, password, is_adm) VALUES ($1, $2, $3) RETURNING *', 
-    [username, password, is_adm], (error, results) => {
-      if (error) {
-        reject(error)
-      }
-      resolve(`A new User has been added added`)
-    })
-  })
-}
 const deleteUser = (body) => {
   return new Promise(function(resolve, reject) {
     const id = parseInt(body.user_id)
@@ -54,6 +43,8 @@ const deleteUser = (body) => {
     })
   })
 }
+
+
 
 module.exports = {
   getUsers,
