@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const port = 3001;
 
-const user_model = require('./user_model');
+const user_model = require('./models/user_model');
 
 app.use(express.json())
 app.use(function (req, res, next) {
@@ -24,7 +24,7 @@ app.get('/user/get', (req, res) => {
   })
 })
 
-app.post('/create-user', (req, res) => {
+app.post('/user/register', (req, res) => {
   user_model.createUser(req.body)
   .then(response => {
     res.status(200).send(response);
@@ -42,6 +42,8 @@ app.delete('/user/delete', (req, res) => {
     res.status(500).send(error);
   })
 })
+
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })

@@ -1,13 +1,4 @@
-const Pool = require('pg').Pool
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'online-shop',
-  password: 'joseneto',
-  port: 5432,
-});
-
-
+const pool = require('./pool');
 
 const getUsers = () => {
   return new Promise(function(resolve, reject) {
@@ -20,6 +11,19 @@ const getUsers = () => {
   }) 
 }
 const createUser = (body) => {
+  return new Promise(function(resolve, reject) {
+    const { username, password, is_adm } = body
+    pool.query('INSERT INTO user_table (username, password, is_adm) VALUES ($1, $2, $3) RETURNING *', 
+    [username, password, is_adm], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(`A new User has been added added`)
+    })
+  })
+}
+
+const getUser = (body) => {
   return new Promise(function(resolve, reject) {
     const { username, password, is_adm } = body
     pool.query('INSERT INTO user_table (username, password, is_adm) VALUES ($1, $2, $3) RETURNING *', 
