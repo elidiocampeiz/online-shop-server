@@ -46,6 +46,36 @@ app.delete('/userdelete/:id', (req, res) => {
   })
 })
 
+app.get('/product/get', (req, res) => {
+  models.getProducts()
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.post('/product/add', (req, res) => {
+  models.createProduct(req.body)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.delete('/product/delete', (req, res) => {
+  models.deleteProduct(req.body)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
