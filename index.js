@@ -24,7 +24,6 @@ app.get('/user/get', (req, res) => {
   })
 })
 
-
 app.post('/user/add', (req, res) => {
   models.createUser(req.body)
   .then(response => {
@@ -34,8 +33,9 @@ app.post('/user/add', (req, res) => {
     res.status(500).send(error);
   })
 })
-app.delete('/user/delete', (req, res) => {
-  merchant_model.deleteUser(req.body)
+app.delete('/user-delete/:id', (req, res) => {
+  let { id } = req.params;
+  models.deleteUser(id)
   .then(response => {
     res.status(200).send(response);
   })
@@ -55,7 +55,10 @@ app.get('/product/get', (req, res) => {
 })
 
 app.post('/product/add', (req, res) => {
-  models.createProduct(req.body)
+  const { product_name, price } = req.body
+  const p = parseFloat(price);
+  models.createProduct(product_name, p)
+
   .then(response => {
     res.status(200).send(response);
   })
@@ -64,8 +67,9 @@ app.post('/product/add', (req, res) => {
   })
 })
 
-app.delete('/product/delete', (req, res) => {
-  models.deleteProduct(req.body)
+app.delete('/product-delete/:id', (req, res) => {
+  let { id } = req.params;
+  models.deleteProduct(id)
   .then(response => {
     res.status(200).send(response);
   })
