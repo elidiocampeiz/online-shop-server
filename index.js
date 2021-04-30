@@ -78,8 +78,19 @@ app.delete('/product-delete/:id', (req, res) => {
   })
 })
 
+app.get('/order/get-history', (req, res) => {
+  const { id } = req.body
+  models.getOrdersPerUser(id)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
 app.get('/order/get', (req, res) => {
-  models.getOrders
+  models.getOrders()
   .then(response => {
     res.status(200).send(response);
   })
@@ -105,6 +116,29 @@ app.post('/order/add', (req, res) => {
 app.delete('/order-delete/:id', (req, res) => {
   let { id } = req.params;
   models.deleteOrder(id)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.get('/sales/get-product', (req, res) => {
+  const { pid } = req.body
+  models.getSalesPerProduct(pid)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.get('/sales/get-date', (req, res) => {
+  const { date_of_sale } = req.body
+  const dds = new Date(date_of_sale)
+  models.getSalesPerDate(dds)
   .then(response => {
     res.status(200).send(response);
   })

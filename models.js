@@ -91,6 +91,18 @@ const getOrders = () => {
   }) 
 }
 
+//Function that allows the user to see his/her purchase history
+const getOrdersPerUser = (userid) => {
+  return new Promise(function(resolve, reject) {
+    pool.query('SELECT * FROM order_table WHERE uID = $1 ORDER BY order_id ASC', [userid], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+    })
+  }) 
+}
+
 const createOrder = (uID, value, date_of_order) => {
   return new Promise(function(resolve, reject) 
   {
@@ -127,6 +139,30 @@ const getSales = () => {
   }) 
 }
 
+//Function that allows admin to see sales per product
+const getSalesPerProduct = (pid) => {
+  return new Promise(function(resolve, reject) {
+    pool.query('SELECT S.productID, P.product_name, count(S.orderID) FROM sales_table S, products_table P WHERE P.product_id = S.productID AND productID = $1 GROUP BY S.productID ORDER BY S.productID ASC', [pid], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+    })
+  }) 
+}
+
+//Function that allows admin to see sales per date
+const getSalesPerDate = (sdate) => {
+  return new Promise(function(resolve, reject) {
+    pool.query('SELECT count(S.orderID), S.date_of_sale FROM sales_table S WHERE date_of_sale = $1 GROUP BY S.date_of_sale ORDER BY S.date_of_sale ASC', [sdate], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+    })
+  }) 
+}
+
 const createSale = (orderID, productID, product_count, date_of_sale) => {
   return new Promise(function(resolve, reject) {
     
@@ -149,8 +185,11 @@ module.exports = {
   createProduct,
   deleteProduct,
   getOrders,
+  getOrdersPerUser,
   createOrder,
   deleteOrder,
   getSales,
+  getSalesPerProduct,
+  getSalesPerDate,
   createSale,
 }
