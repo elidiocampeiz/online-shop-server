@@ -27,7 +27,7 @@ const createUser = (body) => {
       if (error) {
         reject(error)
       }
-      resolve(`A new User has been added added`)
+      resolve(`A new User has been added.`)
     })
   })
 }
@@ -63,7 +63,7 @@ const createProduct = (product_name, price ) => {
       if (error) {
         reject(error)
       }
-      resolve(`A new product has been added added`)
+      resolve(`A new product has been added.`)
     })
   })
 }
@@ -80,6 +80,67 @@ const deleteProduct = (id) => {
   })
 }
 
+const getOrders = () => {
+  return new Promise(function(resolve, reject) {
+    pool.query('SELECT * FROM order_table ORDER BY order_id ASC', (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+    })
+  }) 
+}
+
+const createOrder = (uID, value, date_of_order) => {
+  return new Promise(function(resolve, reject) 
+  {
+    pool.query('INSERT INTO order_table (uID, value, date_of_order) VALUES ($1, $2, $3) RETURNING *', 
+    [uID, value, date_of_order], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(`A new order has been created.`)
+    })
+  })
+}
+
+const deleteOrder = (id) => {
+  return new Promise(function(resolve, reject) {
+    pool.query('DELETE FROM order_table WHERE order_id = $1', 
+    [id], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(`Order deleted with ID: ${id}`)
+    })
+  })
+}
+
+const getSales = () => {
+  return new Promise(function(resolve, reject) {
+    pool.query('SELECT * FROM sales_table ORDER BY order_id ASC', (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+    })
+  }) 
+}
+
+const createSale = (orderID, productID, product_count, date_of_sale) => {
+  return new Promise(function(resolve, reject) {
+    
+    pool.query('INSERT INTO products_table (orderID, productID, product_count, date_of_sale) VALUES ($1, $2, $3, $4) RETURNING *', 
+    [orderID, productID, product_count, date_of_sale], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(`A new sale has been created.`)
+    })
+  })
+}
+  
+
 module.exports = {
   getUsers,
   createUser,
@@ -87,4 +148,9 @@ module.exports = {
   getProducts,
   createProduct,
   deleteProduct,
+  getOrders,
+  createOrder,
+  deleteOrder,
+  getSales,
+  createSale,
 }
