@@ -78,6 +78,99 @@ app.delete('/product-delete/:id', (req, res) => {
   })
 })
 
+app.get('/order/get-history', (req, res) => {
+  const { id } = req.body
+  models.getOrdersPerUser(id)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.get('/order/get', (req, res) => {
+  models.getOrders()
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.post('/order/add', (req, res) => {
+  const { uID, value, date_of_order } = req.body
+  const v = parseFloat(value);
+  const dt = new Date(date_of_order)
+  models.createOrder(uID, v, dt)
+
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.delete('/order-delete/:id', (req, res) => {
+  let { id } = req.params;
+  models.deleteOrder(id)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.get('/sales/get-product', (req, res) => {
+  const { pid } = req.body
+  models.getSalesPerProduct(pid)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.get('/sales/get-date', (req, res) => {
+  const { date_of_sale } = req.body
+  const dds = new Date(date_of_sale)
+  models.getSalesPerDate(dds)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.get('/sales/get', (req, res) => {
+  models.getSales()
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.post('/sales/add', (req, res) => {
+  const { orderID, productID, product_count, date_of_sale } = req.body
+  const pc = parseFloat(product_count);
+  const ds = new Date(date_of_sale)
+  models.createProduct(orderID, productID, pc, ds)
+
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
