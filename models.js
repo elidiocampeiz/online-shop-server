@@ -112,15 +112,17 @@ const getOrdersPerUser = (userid) => {
   }) 
 }
 
-const createOrder = (uID, value, date_of_order) => {
+const createOrder = (uID, price) => {
   return new Promise(function(resolve, reject) 
   {
-    pool.query('INSERT INTO order_table (uID, value, date_of_order) VALUES ($1, $2, $3) RETURNING *', 
-    [uID, value, date_of_order], (error, results) => {
+    pool.query('INSERT INTO order_table (uID, price, date_of_order) VALUES ($1, $2, current_timestamp) RETURNING *', 
+    [uID, price], (error, results) => {
       if (error) {
         reject(error)
       }
-      resolve(results.rows);
+      else{
+        resolve(results.rows[0]);
+      }
     });
   });
 }
@@ -151,11 +153,13 @@ const getSales = () => {
 //Function that allows admin to see sales per product
 const getSalesPerProduct = () => {
   return new Promise(function(resolve, reject) {
-    pool.query('SELECT S.productID, P.product_name, count(S.orderID) FROM sales_table S, products_table P WHERE P.product_id = S.productID GROUP BY S.productID,  P.product_name ORDER BY S.productID ASC;', (error, results) => {
+    pool.query('SELECT S.productID, P.product_name, P.price, count(S.orderID) FROM sales_table S, products_table P WHERE P.product_id = S.productID GROUP BY S.productID, P.product_name, P.price ORDER BY S.productID ASC;', (error, results) => {
       if (error) {
         reject(error)
       }
-      resolve(results.rows);
+      else{
+        resolve(results.rows);
+      }
     })
   }) 
 }
@@ -172,15 +176,17 @@ const getSalesPerDate = (sdate) => {
   }) 
 }
 
-const createSale = (orderID, productID, product_count, date_of_sale) => {
+const createSale = (orderID, productID, product_count) => {
   return new Promise(function(resolve, reject) {
     
-    pool.query('INSERT INTO products_table (orderID, productID, product_count, date_of_sale) VALUES ($1, $2, $3, $4) RETURNING *', 
-    [orderID, productID, product_count, date_of_sale], (error, results) => {
+    pool.query('INSERT INTO sales_table (orderID, productid, product_count, date_of_sale) VALUES ($1, $2, $3, current_timestamp) RETURNING *', 
+    [orderID, productID, product_count], (error, results) => {
       if (error) {
         reject(error)
       }
-      resolve(`A new sale has been created.`)
+      else{
+        resolve(results.rows[0])
+      }
     })
   })
 }

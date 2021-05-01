@@ -99,9 +99,8 @@ app.get('/order/get', (req, res) => {
 })
 
 app.post('/order/add', (req, res) => {
-  const { uID, value, date_of_order } = req.body
-  const dt = new Date(date_of_order)
-  models.createOrder(uID, value, dt)
+  const { uID, price } = req.body
+  models.createOrder(uID, price)
 
   .then(response => {
     res.status(200).send(response);
@@ -155,10 +154,11 @@ app.get('/sales/get', (req, res) => {
 })
 
 app.post('/sales/add', (req, res) => {
-  const { orderID, productID, product_count, date_of_sale } = req.body
+  const { orderID, productID, product_count } = req.body
   const pc = parseFloat(product_count);
-  const ds = new Date(date_of_sale)
-  models.createProduct(orderID, productID, pc, ds)
+  const oId = parseInt(orderID);
+  const pId = parseInt(productID);
+  models.createSale(oId, pId, pc)
 
   .then(response => {
     res.status(200).send(response);
