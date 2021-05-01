@@ -56,8 +56,7 @@ app.get('/product/get', (req, res) => {
 
 app.post('/product/add', (req, res) => {
   const { product_name, price } = req.body
-  const p = parseFloat(price);
-  models.createProduct(product_name, p)
+  models.createProduct(product_name, price)
 
   .then(response => {
     res.status(200).send(response);
@@ -78,9 +77,9 @@ app.delete('/product-delete/:id', (req, res) => {
   })
 })
 
-app.get('/order/get-history', (req, res) => {
-  const { id } = req.body
-  models.getOrdersPerUser(id)
+app.post('/order/get-history', (req, res) => {
+  const { uID } = req.body
+  models.getOrdersPerUser(uID)
   .then(response => {
     res.status(200).send(response);
   })
@@ -101,9 +100,8 @@ app.get('/order/get', (req, res) => {
 
 app.post('/order/add', (req, res) => {
   const { uID, value, date_of_order } = req.body
-  const v = parseFloat(value);
   const dt = new Date(date_of_order)
-  models.createOrder(uID, v, dt)
+  models.createOrder(uID, value, dt)
 
   .then(response => {
     res.status(200).send(response);
@@ -125,8 +123,7 @@ app.delete('/order-delete/:id', (req, res) => {
 })
 
 app.get('/sales/get-product', (req, res) => {
-  const { pid } = req.body
-  models.getSalesPerProduct(pid)
+  models.getSalesPerProduct()
   .then(response => {
     res.status(200).send(response);
   })
@@ -135,7 +132,7 @@ app.get('/sales/get-product', (req, res) => {
   })
 })
 
-app.get('/sales/get-date', (req, res) => {
+app.post('/sales/get-date', (req, res) => {
   const { date_of_sale } = req.body
   const dds = new Date(date_of_sale)
   models.getSalesPerDate(dds)
