@@ -1,10 +1,18 @@
 const Pool = require("pg").Pool;
 
+// const pool = new Pool({
+//   user: "postgres",
+//   host: "localhost",
+//   database: "online-shop",
+//   password: "joseneto",
+//   port: 5432,
+// });
+
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "online-shop",
-  password: "joseneto",
+  database: "store_database",
+  password: "OnlineShop001",
   port: 5432,
 });
 
@@ -14,7 +22,7 @@ const getUsers = () => {
       if (error) {
         reject(error)
       }
-      resolve(results.rows);
+      resolve(results?.rows);
     })
   }) 
 }
@@ -98,6 +106,7 @@ const getOrdersPerUser = (userid) => {
       if (error) {
         reject(error)
       }
+      console.log(results, "HERE");
       resolve(results.rows);
     })
   }) 
@@ -111,7 +120,7 @@ const createOrder = (uID, value, date_of_order) => {
       if (error) {
         reject(error)
       }
-      resolve(`A new order has been created.`)
+      resolve(results.rows);
     })
   })
 }
@@ -130,7 +139,7 @@ const deleteOrder = (id) => {
 
 const getSales = () => {
   return new Promise(function(resolve, reject) {
-    pool.query('SELECT * FROM sales_table ORDER BY order_id ASC', (error, results) => {
+    pool.query('SELECT * FROM sales_table ORDER BY orderID ASC', (error, results) => {
       if (error) {
         reject(error)
       }
@@ -140,13 +149,13 @@ const getSales = () => {
 }
 
 //Function that allows admin to see sales per product
-const getSalesPerProduct = (pid) => {
+const getSalesPerProduct = () => {
   return new Promise(function(resolve, reject) {
-    pool.query('SELECT S.productID, P.product_name, count(S.orderID) FROM sales_table S, products_table P WHERE P.product_id = S.productID AND productID = $1 GROUP BY S.productID ORDER BY S.productID ASC', [pid], (error, results) => {
+    pool.query('SELECT S.productID, P.product_name, count(S.orderID) FROM sales_table S, products_table P WHERE P.product_id = S.productID GROUP BY S.productID,  P.product_name ORDER BY S.productID ASC;', (error, results) => {
       if (error) {
         reject(error)
       }
-      resolve(results.rows);
+      resolve(results?.rows);
     })
   }) 
 }
