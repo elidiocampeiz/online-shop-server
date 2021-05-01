@@ -107,6 +107,15 @@ app.get('/order/get', (req, res) => {
     res.status(500).send(error);
   })
 })
+app.get('/order/get-avg', (req, res) => {
+  models.getAvgOrders()
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
 
 app.post('/order/add', (req, res) => {
   const { uID, price } = req.body
@@ -141,10 +150,8 @@ app.get('/sales/get-product', (req, res) => {
   })
 })
 
-app.post('/sales/get-date', (req, res) => {
-  const { date_of_sale } = req.body
-  const dds = new Date(date_of_sale)
-  models.getSalesPerDate(dds)
+app.get('/sales/get-date', (req, res) => {
+  models.getSalesPerDate()
   .then(response => {
     res.status(200).send(response);
   })

@@ -159,7 +159,19 @@ const getSales = () => {
     })
   }) 
 }
-
+const getAvgOrders = () =>{
+  return new Promise(function(resolve, reject) {
+    pool.query('select  avg(cast(sumval as float)) from (select uID, count(order_id) as sumval from order_table group by uID) order_table;', (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      else{
+        resolve(results.rows[0]||0);
+      }
+    })
+  }) 
+  //select  avg(cast(sumval as float)) from (select uID, count(order_id) as sumval from order_table group by uID) order_table;
+}
 //Function that allows admin to see sales per product
 const getSalesPerProduct = () => {
   return new Promise(function(resolve, reject) {
@@ -175,13 +187,15 @@ const getSalesPerProduct = () => {
 }
 
 //Function that allows admin to see sales per date
-const getSalesPerDate = (sdate) => {
+const getSalesPerDate = () => {
   return new Promise(function(resolve, reject) {
-    pool.query('SELECT count(S.orderID), S.date_of_sale FROM sales_table S WHERE date_of_sale = $1 GROUP BY S.date_of_sale ORDER BY S.date_of_sale ASC', [sdate], (error, results) => {
+    pool.query('SELECT count(S.orderID), S.date_of_sale FROM sales_table S GROUP BY S.date_of_sale ORDER BY S.date_of_sale ASC', (error, results) => {
       if (error) {
         reject(error)
       }
-      resolve(results.rows);
+      else{
+        resolve(results.rows);
+      }
     })
   }) 
 }
@@ -217,5 +231,6 @@ module.exports = {
   getSales,
   getSalesPerProduct,
   getSalesPerDate,
+  getAvgOrders,
   createSale,
 }
