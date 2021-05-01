@@ -26,6 +26,16 @@ const getUsers = () => {
     })
   }) 
 }
+const login = (username, password) => {
+  return new Promise(function(resolve, reject) {
+    pool.query('SELECT * FROM user_table ORDER BY user_id ASC', (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows.find((u) => u.username == username && u.password == password)||false);
+    })
+  }) 
+}
 
 const createUser = (body) => {
   return new Promise(function(resolve, reject) {
@@ -35,7 +45,7 @@ const createUser = (body) => {
       if (error) {
         reject(error)
       }
-      resolve(`A new User has been added.`)
+      resolve(results.rows[0])
     })
   })
 }
@@ -194,6 +204,7 @@ const createSale = (orderID, productID, product_count) => {
 
 module.exports = {
   getUsers,
+  login,
   createUser,
   deleteUser,
   getProducts,
