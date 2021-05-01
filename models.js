@@ -1,20 +1,20 @@
 const Pool = require("pg").Pool;
 
-// const pool = new Pool({
-//   user: "postgres",
-//   host: "localhost",
-//   database: "online-shop",
-//   password: "joseneto",
-//   port: 5432,
-// });
-
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "store_database",
-  password: "OnlineShop001",
+  database: "online-shop",
+  password: "joseneto",
   port: 5432,
 });
+
+// const pool = new Pool({
+//   user: "postgres",
+//   host: "localhost",
+//   database: "store_database",
+//   password: "OnlineShop001",
+//   port: 5432,
+// });
 
 const getUsers = () => {
   return new Promise(function(resolve, reject) {
@@ -22,7 +22,7 @@ const getUsers = () => {
       if (error) {
         reject(error)
       }
-      resolve(results?.rows);
+      resolve(results.rows);
     })
   }) 
 }
@@ -121,8 +121,8 @@ const createOrder = (uID, value, date_of_order) => {
         reject(error)
       }
       resolve(results.rows);
-    })
-  })
+    });
+  });
 }
 
 const deleteOrder = (id) => {
@@ -155,7 +155,7 @@ const getSalesPerProduct = () => {
       if (error) {
         reject(error)
       }
-      resolve(results?.rows);
+      resolve(results.rows);
     })
   }) 
 }
